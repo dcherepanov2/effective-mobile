@@ -30,11 +30,6 @@ public class User implements UserDetails {
     @Getter
     private Long id;
 
-    @Column(name = "slug")
-    @Getter
-    @Setter
-    private String slug;
-
     @Column(name = "create_date")
     @Getter
     private LocalDateTime createDate;
@@ -48,11 +43,10 @@ public class User implements UserDetails {
     @Setter
     private String password;
 
-
-    @Column(name = "email")
+    @Transient
     @Getter
     @Setter
-    private String email;
+    private String contact;
 
     @Convert(converter = UserStatusConverter.class)
     @Column(name = "status")
@@ -96,7 +90,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return contact;
     }
 
     @Override

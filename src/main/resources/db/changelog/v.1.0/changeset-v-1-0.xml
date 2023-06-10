@@ -10,8 +10,11 @@
     <include file="/db/changelog/v.1.0/tables/user2roles.sql"/>
     <include file="/db/changelog/v.1.0/tables/user_contact.sql"/>
     <include file="/db/changelog/v.1.0/tables/followers.sql"/>
+    <include file="db/changelog/v.1.0/tables/chat.sql"/>
+    <include file="db/changelog/v.1.0/tables/message.sql"/>
     <include file="/db/changelog/v.1.0/tables/freinds.sql"/>
     <include file="/db/changelog/v.1.0/tables/posts.sql"/>
     <include file="/db/changelog/v.1.0/sequence/user_contact_seq.sql"/>
     <include file="/db/changelog/v.1.0/intialize_db.sql"/>
+
 </databaseChangeLog>

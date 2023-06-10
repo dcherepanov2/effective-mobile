@@ -60,6 +60,7 @@ class SystemRegistrationAndAuthTest {//решил сделать системн�
         String requestBody = objectMapper.writeValueAsString(contactEmailDto);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user-contact/send-approve-code")
                                       .contentType(MediaType.APPLICATION_JSON).content(requestBody));
+        perform.andExpect(MockMvcResultMatchers.status().isOk());
         perform.andExpect(MockMvcResultMatchers.content()
                 .string(org.hamcrest.Matchers.containsString("result")));
         perform.andExpect(MockMvcResultMatchers.content()
@@ -76,6 +77,7 @@ class SystemRegistrationAndAuthTest {//решил сделать системн�
         String requestBody = objectMapper.writeValueAsString(approveEmailDto);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user-contact/approve-code")
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody));
+        perform.andExpect(MockMvcResultMatchers.status().isOk());
         perform.andExpect(MockMvcResultMatchers.content()
                 .string(org.hamcrest.Matchers.containsString("result")));
         perform.andExpect(MockMvcResultMatchers.content()
@@ -92,6 +94,7 @@ class SystemRegistrationAndAuthTest {//решил сделать системн�
         String requestBody = objectMapper.writeValueAsString(registerDto);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/register")
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody));
+        perform.andExpect(MockMvcResultMatchers.status().isOk());
         perform.andExpect(MockMvcResultMatchers.content()
                 .string(org.hamcrest.Matchers.containsString("token")));
         String jsonResponse = perform.andReturn().getResponse().getContentAsString();
@@ -105,6 +108,7 @@ class SystemRegistrationAndAuthTest {//решил сделать системн�
         String requestBody = objectMapper.writeValueAsString(emailAuthenticationResponse);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/auth")
                 .contentType(MediaType.APPLICATION_JSON).content(requestBody));
+        perform.andExpect(MockMvcResultMatchers.status().isOk());
         perform.andExpect(MockMvcResultMatchers.content()
                 .string(org.hamcrest.Matchers.containsString("token")));
         String jsonResponse = perform.andReturn().getResponse().getContentAsString();

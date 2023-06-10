@@ -21,9 +21,10 @@ public class JwtUserDetailsService implements UserDetailsService{
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);//todo должен подсоединяться userContact
+        User user = userRepository.findUserByContact(email);
         if(user == null)
             throw new UsernameNotFoundException("Пользователь с таким email не найден");
+        user.setContact(email);
         return user;
     }
 

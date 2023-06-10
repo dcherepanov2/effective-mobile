@@ -1,11 +1,18 @@
+TRUNCATE TABLE user_contact CASCADE;
+TRUNCATE TABLE user2roles CASCADE;
+TRUNCATE TABLE users CASCADE;
+TRUNCATE TABLE message CASCADE;
+TRUNCATE TABLE friends CASCADE;
+TRUNCATE TABLE followers CASCADE;
+TRUNCATE TABLE chat CASCADE;
 
-INSERT INTO public.users(id, slug, name, create_date, password, email, status) SELECT 10000, 'slug', 'Danil', CURRENT_DATE, '123456', 'test@test.com', 1 WHERE NOT EXISTS ( SELECT 10000 FROM public.users WHERE id = 10000);-- пользователь id 1 подписан на пользователя id 2, нужны для тестирования логики получения постов друга
+INSERT INTO public.users(id, name, create_date, password, status) SELECT 10000, 'Danil', CURRENT_DATE, '123456', 1 WHERE NOT EXISTS ( SELECT 10000 FROM public.users WHERE id = 10000);-- пользователь id 1 подписан на пользователя id 2, нужны для тестирования логики получения постов друга
 
-INSERT INTO public.users(id, slug, name, create_date, password, email, status) SELECT 10001, 'slug1', 'Danil', CURRENT_DATE, '123456', 'test1@test.com', 1 WHERE NOT EXISTS (SELECT 1 FROM public.users WHERE id = 10001);
+INSERT INTO public.users(id, name, create_date, password, status) SELECT 10001, 'Danil', CURRENT_DATE, '123456', 1 WHERE NOT EXISTS (SELECT 1 FROM public.users WHERE id = 10001);
 
-INSERT INTO public.users(id, slug, name, create_date, password, email, status) SELECT 10002, 'slug2', 'Danil', CURRENT_DATE, '123456', 'test2@test.com', 1 WHERE NOT EXISTS ( SELECT 1 FROM public.users WHERE id = 10002);-- здесь пользователи заранее на друг друга не подписаны, нужны для тестирования логики подписки и добавления в друзья
+INSERT INTO public.users(id, name, create_date, password, status) SELECT 10002,  'Danil', CURRENT_DATE, '123456', 1 WHERE NOT EXISTS ( SELECT 1 FROM public.users WHERE id = 10002);-- здесь пользователи заранее на друг друга не подписаны, нужны для тестирования логики подписки и добавления в друзья
 
-INSERT INTO public.users(id, slug, name, create_date, password, email, status) SELECT 10003, 'slug3', 'Danil', CURRENT_DATE, '123456', 'test3@test.com', 1 WHERE NOT EXISTS (SELECT 1 FROM public.users WHERE id = 10003);
+INSERT INTO public.users(id, name, create_date, password, status) SELECT 10003, 'Danil', CURRENT_DATE, '123456', 1 WHERE NOT EXISTS (SELECT 1 FROM public.users WHERE id = 10003);
 
 INSERT INTO public.user_contact(id, user_id, type, approved, code_time, code, contact) SELECT 1000000, 10000, 1, true, CURRENT_DATE, 123456, 'test@test.com' WHERE NOT EXISTS (SELECT 1 FROM public.user_contact WHERE contact = 'test@test.com');
 
@@ -19,9 +26,29 @@ INSERT INTO public.followers(follower_id, user_id) SELECT 10000, 10001 WHERE NOT
 
 INSERT INTO public.followers(follower_id, user_id) SELECT 10001, 10000 WHERE NOT EXISTS (SELECT 1 FROM public.followers WHERE follower_id = 10001 AND user_id = 10000);
 
-INSERT INTO public.friends(friend_id, user_id) SELECT 10001, 10000 WHERE NOT EXISTS (SELECT 1 FROM public.friends WHERE friend_id = 10001 AND user_id = 10000);
+INSERT INTO public.followers (follower_id, user_id)
+SELECT 10001, 10000
+    WHERE NOT EXISTS (SELECT 1 FROM public.followers WHERE follower_id = 10001 AND user_id = 10000);
 
-INSERT INTO public.user2roles(role_id, user_id) SELECT 1, 10001 WHERE NOT EXISTS (SELECT 1 FROM public.user2roles WHERE role_id = 1 AND user_id = 10000);
+INSERT INTO public.chat (chat_id)
+SELECT 100000
+    WHERE NOT EXISTS (SELECT 1 FROM public.chat WHERE chat_id = 100000);
+
+INSERT INTO public.message (id, chat_id, create_date, from_user, to_user, content)
+VALUES (1000001, 100000, CURRENT_DATE, 'test1@test.com', 'test@test.com', 'Test message');
+
+INSERT INTO public.message (id, chat_id, create_date, from_user, to_user, content)
+VALUES (1000002, 100000, CURRENT_DATE, 'test1@test.com', 'test@test.com', 'Test message');
+
+INSERT INTO public.message (id, chat_id, create_date, from_user, to_user, content)
+VALUES (1000003, 100000, CURRENT_DATE, 'test1@test.com', 'test@test.com', 'Test message');
+
+INSERT INTO public.message (id, chat_id, create_date, from_user, to_user, content)
+VALUES (1000004, 100000, CURRENT_DATE, 'test1@test.com', 'test@test.com', 'Test message');
+
+INSERT INTO public.friends(friend_id, user_id,chat_id) SELECT 10001, 10000, 100000 WHERE NOT EXISTS (SELECT 1 FROM public.friends WHERE friend_id = 10001 AND user_id = 10000 AND chat_id = 100000);
+
+INSERT INTO public.user2roles(role_id, user_id) SELECT 1, 10000 WHERE NOT EXISTS (SELECT 1 FROM public.user2roles WHERE role_id = 1 AND user_id = 10000);
 
 INSERT INTO public.user2roles(role_id, user_id) SELECT 1, 10001 WHERE NOT EXISTS (SELECT 1 FROM public.user2roles WHERE role_id = 1 AND user_id = 10001);
 

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -52,6 +53,7 @@ class UserInteractionController {
     @Test
     void followOnRespondent() throws Exception {
         User user = userRepository.findUserByContact(thirdUserContact);
+        user.setContact(thirdUserContact);
         String tokenThirdUser = "Bearer_" + jwtService.generateToken(user);
         FollowerDto followerDto = new FollowerDto();
         followerDto.setPublisherContact(fourthUserContact);
@@ -65,8 +67,9 @@ class UserInteractionController {
 
     @Order(2)
     @Test
-    void respondentAddFriendYourselfFollower() throws Exception {
+    void respondentAddFriendFollower() throws Exception {
         User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
         String tokenFourthUser = "Bearer_" + jwtService.generateToken(user);
         FollowerDto followerDto = new FollowerDto();
         followerDto.setPublisherContact(thirdUserContact);
@@ -78,10 +81,23 @@ class UserInteractionController {
                 .string(org.hamcrest.Matchers.containsString("The user has been successfully added as a friend")));
     }
 
+
     @Order(3)
+    @Test
+    void getChat() throws Exception {
+        User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
+        String tokenFourthUser = "Bearer_" + jwtService.generateToken(user);
+        ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/interaction/get-chat-by-contact/"+thirdUserContact)
+                .contentType(MediaType.APPLICATION_JSON).header("Authorization",tokenFourthUser));
+        perform.andExpect(status().isOk()).andDo(print());
+    }
+
+    @Order(4)
     @Test
     void deleteFriend() throws Exception {
         User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
         String tokenFourthUser = "Bearer_" + jwtService.generateToken(user);
         FollowerDto followerDto = new FollowerDto();
         followerDto.setPublisherContact(thirdUserContact);
@@ -99,6 +115,7 @@ class UserInteractionController {
     @Test
     void deleteFollower() throws Exception {
         User user = userRepository.findUserByContact(thirdUserContact);
+        user.setContact(thirdUserContact);
         String tokenFourthUser = "Bearer_" + jwtService.generateToken(user);
         FollowerDto followerDto = new FollowerDto();
         followerDto.setPublisherContact(fourthUserContact);

@@ -31,6 +31,8 @@ public class ExceptionResolver{
     @ExceptionHandler({
             VerifyContactException.class,
             RegistrationException.class,
+            FollowerDeleteException.class,
+            ChatNotFoundException.class,
             PasswordException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -42,9 +44,11 @@ public class ExceptionResolver{
     @ExceptionHandler({
             UsernameNotFoundException.class,
             PostNotFoundException.class,
+            PublisherNotFoundException.class,
+            DeletePublisherNotFoundException.class,
             SaveFileException.class
     })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponseDto handleNotFound(Exception e){
         return new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
@@ -53,7 +57,7 @@ public class ExceptionResolver{
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponseDto handleAccessDeniedException(Exception e) {
-        return new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

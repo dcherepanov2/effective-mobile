@@ -33,6 +33,12 @@ public class Friend {
     @Setter
     private User user;
 
+    @OneToOne
+    @MapsId("chatId")
+    @JoinColumn(name = "chat_id")
+    @Getter
+    @Setter
+    private Chat chat;
     @Embeddable
     @Data
     public static class FriendId implements Serializable {
@@ -43,17 +49,21 @@ public class Friend {
         @Column(name = "user_id")
         private Long userId;
 
+        @Column(name = "chat_id")
+        private Long chatId;
+
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            FriendId that = (FriendId) o;
-            return Objects.equals(friendId, that.friendId) && Objects.equals(userId, that.userId);
+            FriendId friendId1 = (FriendId) o;
+            return Objects.equals(friendId, friendId1.friendId) && Objects.equals(userId, friendId1.userId) && Objects.equals(chatId, friendId1.chatId);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(friendId, userId);
+            return Objects.hash(friendId, userId, chatId);
         }
     }
 }

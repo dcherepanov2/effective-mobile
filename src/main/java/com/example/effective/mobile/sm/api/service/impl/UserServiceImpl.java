@@ -47,15 +47,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     public User register(RegisterDto request) throws RegistrationException {
-        UserContact byContact = userContactRepo.findByContactOrderByCodeTime(request.getEmail());//todo дописать что если контакт иметь пользователя, то его нельзя зарегистрировать
-        if (byContact == null) {
-            throw new RegistrationException("Нельзя зарегистрировать аккаунт на неподтвержденные контакты.");
+        UserContact byContact = userContactRepo.findByContactOrderByCodeTime(request.getEmail());
+        if (byContact == null || !byContact.getApproved()) {
+            throw new RegistrationException("You cannot register an account for unconfirmed contacts.");
+        }
+        if (byContact.getUserId() != null) {
+            throw new RegistrationException("You cannot register an account for a contact that belongs to another user.");
         }
         User user = User.builder()
                 .name(request.getName())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
-                .slug(SlugGeneratorUtils.generateSlug("user"))
+                .contact(request.getEmail())
                 .status(USER_STATUS.ENABLED)
                 .createDate(LocalDateTime.now())
                 .roles(Collections.singletonList(roleRepository.findByName("ROLE_USER")))
@@ -78,6 +80,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(plainPassword, hashedPassword)) {
             throw new PasswordException("Неверный пароль");
         }
+        user.setContact(request.getContact());// так как пароли совпали и запрос верный - можно подставлять валидные данные
         return new AuthenticationResponse(jwtService.generateToken(user));
     }
 }

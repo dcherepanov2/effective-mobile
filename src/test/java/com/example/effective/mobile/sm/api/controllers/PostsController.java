@@ -52,6 +52,7 @@ class PostsController {
     @Test
     void addPost() throws Exception {
         User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
         String token = "Bearer_" + jwtService.generateToken(user);
         File fileTest = new File("src/test/resources/upload/image/posts/test.png");
         AddPostDto addPostDto = new AddPostDto();
@@ -59,7 +60,6 @@ class PostsController {
         addPostDto.setDescription("description");
         MockMultipartFile file = new MockMultipartFile("image", "test.png",
                 ImageType.PNG.getContentType(), Files.readAllBytes(fileTest.toPath()));
-
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/posts/add")
                 .file(file)
                 .param("title", addPostDto.getTitle())
@@ -81,6 +81,7 @@ class PostsController {
     @Test
     void editPost() throws Exception {
         User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
         String token = "Bearer_" + jwtService.generateToken(user);
         File fileTest = new File("src/test/resources/upload/image/posts/ship.png");
         AddPostDto addPostDto = new AddPostDto();
@@ -109,6 +110,7 @@ class PostsController {
     @Test
     void deletePost() throws Exception {
         User user = userRepository.findUserByContact(fourthUserContact);
+        user.setContact(fourthUserContact);
         String token = "Bearer_" + jwtService.generateToken(user);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/posts/delete/" + slugPost)
                 .header("Authorization", token));

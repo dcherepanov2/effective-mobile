@@ -26,9 +26,10 @@ public class DelegatedAuthenticationEntryPoint implements AuthenticationEntryPoi
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), authException.getLocalizedMessage());
-//        if(!(authException instanceof BadCredentialsException) && !(authException instanceof UsernameNotFoundException)){
-//            errorResponseDto = new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Your token is not valid");// todo удалить этот костыль если останется время, могут быть проблемы с масштабируемостью
-//        }
+        //if(authException instanceof JwtAuthenticationException){
+        //    System.out.println("hello");
+        //} todo почему-то он говорит, что это объект не пренадлежит JwtAuthenticationException, хотя по дебагу видно что бросается нужное мне исключени
+        // todo почитать новую доку security если останется время
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         String resBody = objectMapper.writeValueAsString(errorResponseDto);

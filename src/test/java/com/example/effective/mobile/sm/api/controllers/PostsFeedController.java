@@ -49,6 +49,7 @@ class PostsFeedController {
     @Test
     void getRespondentsPosts() throws Exception {
         User userByContact = userRepository.findUserByContact(userContact);
+        userByContact.setContact(userContact);
         String token = "Bearer_" + jwtService.generateToken(userByContact);
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts-feed/get-respondents-posts")
                         .header("Authorization", token));
@@ -58,6 +59,7 @@ class PostsFeedController {
         JsonNode postsNode = jsonNode.get("posts");
         int actualCount = postsNode.size();
         assertEquals(maxCount, actualCount);
+        perform.andExpect(MockMvcResultMatchers.status().isOk());
         perform.andExpect(MockMvcResultMatchers.content()
                 .string(containsString("image")));
         perform.andExpect(MockMvcResultMatchers.content()

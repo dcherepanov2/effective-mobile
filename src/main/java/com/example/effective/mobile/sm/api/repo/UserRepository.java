@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+//    User findByEmail(String email);
 
     @Query(value = "FROM User AS u INNER JOIN FETCH UserContact AS uc ON uc.contact = :contact AND uc.userId.id = u.id")
     User findUserByContact(@Param("contact") String contact);
