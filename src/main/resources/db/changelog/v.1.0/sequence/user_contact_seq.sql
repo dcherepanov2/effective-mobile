@@ -1,0 +1,3 @@
+
+CREATE SEQUENCE IF NOT EXISTS user_contact_seq;
+ALTER SEQUENCE user_contact_seq INCREMENT 50;

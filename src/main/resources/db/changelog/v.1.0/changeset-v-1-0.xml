@@ -1,0 +1,17 @@
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="/db/changelog/v.1.0/tables/user.sql"/>
+    <include file="/db/changelog/v.1.0/tables/roles.sql"/>
+    <include file="/db/changelog/v.1.0/tables/user2roles.sql"/>
+    <include file="/db/changelog/v.1.0/tables/user_contact.sql"/>
+    <include file="/db/changelog/v.1.0/tables/followers.sql"/>
+    <include file="/db/changelog/v.1.0/tables/freinds.sql"/>
+    <include file="/db/changelog/v.1.0/tables/posts.sql"/>
+    <include file="/db/changelog/v.1.0/sequence/user_contact_seq.sql"/>
+    <include file="/db/changelog/v.1.0/intialize_db.sql"/>
+</databaseChangeLog>
